@@ -159,7 +159,9 @@ int EvalPosition(const S_BOARD *pos)
     pieces[index] = 0;
     squares[index] = 0;
     
-    return evaluate_nnue(pos->side, pieces, squares);
+    // return NNUE score and give a penalty for 50 move rule counter increasing
+    // without this penakty engine might not mate in KQK or KRK endgames!
+    return evaluate_nnue(pos->side, pieces, squares) * (100 - pos->fiftyMove) / 100;
 }
 
 /*int EvalPosition(const S_BOARD *pos) {
